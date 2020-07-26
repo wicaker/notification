@@ -34,7 +34,6 @@ func NewQueue(
 	exchange Exchange,
 	routingKey []string,
 	isForConsume bool,
-	isForPublish bool,
 ) Queue {
 	q := new(queue)
 
