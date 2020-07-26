@@ -15,9 +15,9 @@ type EmailSending struct {
 
 // EmailSendingUsecase represent emailsending's usecase contract
 type EmailSendingUsecase interface {
-	RegisterNotif(context.Context, EmailSending, User) error
-	ChangePasswordNotif(context.Context, EmailSending, User) error
-	ForgotPasswordNotif(context.Context, EmailSending, User) error
+	RegisterNotif(context.Context, *User) error
+	ChangePasswordNotif(context.Context, *User) error
+	ForgotPasswordNotif(context.Context, *User) error
 }
 
 // EmailSendingHelper represent emailsending's helper contract

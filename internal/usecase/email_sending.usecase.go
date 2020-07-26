@@ -22,11 +22,11 @@ func NewEmailSendingUsecase(timeout time.Duration, helper domain.EmailSendingHel
 	}
 }
 
-func (eu *emailSendingUsecase) RegisterNotif(ctx context.Context, data domain.EmailSending, user domain.User) error {
+func (eu *emailSendingUsecase) RegisterNotif(ctx context.Context, user *domain.User) error {
 	// preparing to send email
 	emailSending := domain.EmailSending{
 		EmailFrom:   os.Getenv("EMAIL_SENDING_FROM"),
-		EmailTo:     data.EmailTo,
+		EmailTo:     []string{user.EmailDestination},
 		Subject:     "Please confirm your email address",
 		HTMLMessage: fmt.Sprintf(`<p>%s</p>`, user.Token),
 	}
@@ -35,11 +35,11 @@ func (eu *emailSendingUsecase) RegisterNotif(ctx context.Context, data domain.Em
 	return eu.helper.Send(ctx, &emailSending)
 }
 
-func (eu *emailSendingUsecase) ChangePasswordNotif(ctx context.Context, data domain.EmailSending, user domain.User) error {
+func (eu *emailSendingUsecase) ChangePasswordNotif(ctx context.Context, user *domain.User) error {
 	// preparing to send email
 	emailSending := domain.EmailSending{
 		EmailFrom:   os.Getenv("EMAIL_SENDING_FROM"),
-		EmailTo:     data.EmailTo,
+		EmailTo:     []string{user.EmailDestination},
 		Subject:     "Change Password Confirmation",
 		HTMLMessage: fmt.Sprintf(`<p>%s</p>`, user.Token),
 	}
@@ -48,11 +48,11 @@ func (eu *emailSendingUsecase) ChangePasswordNotif(ctx context.Context, data dom
 	return eu.helper.Send(ctx, &emailSending)
 }
 
-func (eu *emailSendingUsecase) ForgotPasswordNotif(ctx context.Context, data domain.EmailSending, user domain.User) error {
+func (eu *emailSendingUsecase) ForgotPasswordNotif(ctx context.Context, user *domain.User) error {
 	// preparing to send email
 	emailSending := domain.EmailSending{
 		EmailFrom:   os.Getenv("EMAIL_SENDING_FROM"),
-		EmailTo:     data.EmailTo,
+		EmailTo:     []string{user.EmailDestination},
 		Subject:     "Forgot Password Confirmation",
 		HTMLMessage: fmt.Sprintf(`<p>%s</p>`, user.Token),
 	}
