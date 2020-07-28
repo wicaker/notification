@@ -5,21 +5,20 @@ import (
 	"time"
 
 	"github.com/wicaker/notification/internal/domain"
-	"github.com/wicaker/notification/internal/pkg/mail"
 
 	"gopkg.in/gomail.v2"
 )
 
 type emailSendingHelper struct {
 	contextTimeout time.Duration
-	dialer         *gomail.Dialer
+	dialer         domain.GomailDialer
 }
 
 // NewEmailSendingHelper will create new an emailSendingHelper object representation of domain.EmailSendingHelper interface
-func NewEmailSendingHelper(timeout time.Duration) domain.EmailSendingHelper {
+func NewEmailSendingHelper(timeout time.Duration, dialer domain.GomailDialer) domain.EmailSendingHelper {
 	return &emailSendingHelper{
 		contextTimeout: timeout,
-		dialer:         mail.NewDialer(),
+		dialer:         dialer,
 	}
 }
 
