@@ -4,15 +4,21 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/wicaker/notification/internal/domain"
+
 	"gopkg.in/gomail.v2"
 )
 
+type gomailDialer struct {
+	dialer domain.GomailDialer
+}
+
 // NewGomailDialer will return gomail.Dialer configuration
-func NewGomailDialer() *gomail.Dialer {
-	configSMTPHOST := os.Getenv("CONFIG_SMTP_HOST")
-	configSMTPPORT, _ := strconv.Atoi(os.Getenv("CONFIG_SMTP_PORT"))
-	configEmail := os.Getenv("CONFIG_EMAIL")
-	configPassword := os.Getenv("CONFIG_PASSWORD")
+func NewGomailDialer() domain.GomailDialer {
+	configSMTPHOST := os.Getenv("GOMAIL_SMTP_HOST")
+	configSMTPPORT, _ := strconv.Atoi(os.Getenv("GOMAIL_SMTP_PORT"))
+	configEmail := os.Getenv("GOMAIL_EMAIL")
+	configPassword := os.Getenv("GOMAIL_PASSWORD")
 
 	dialer := gomail.NewDialer(
 		configSMTPHOST,
@@ -21,5 +27,11 @@ func NewGomailDialer() *gomail.Dialer {
 		configPassword,
 	)
 
-	return dialer
+	return &gomailDialer{
+		dialer: dialer,
+	}
+}
+
+func (g *gomailDialer) DialAndSend(m ...*gomail.Message) error {
+	return g.dialer.DialAndSend(m[:]...)
 }
