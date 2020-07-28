@@ -184,5 +184,8 @@ func (q *queue) Acknowledgement(err error, msg *amqp.Delivery) {
 		msg.Reject(false)
 	} else {
 		msg.Ack(true)
+		logrus.WithFields(logrus.Fields{
+			"at": time.Now().Format("2006-01-02 15:04:05"),
+		}).Printf("Acknowledged... Message from routingKey: %s", msg.RoutingKey)
 	}
 }
