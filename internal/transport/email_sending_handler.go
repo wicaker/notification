@@ -39,19 +39,19 @@ func NewEmailSendingHandler(rmqQueue []rmq.Queue, u domain.EmailSendingUsecase) 
 
 	handler.queueUserRegister.Consume(func(msg amqp.Delivery) {
 		err := handler.Register(ctx, msg.Body)
-		LogMqError(err, &msg, "")
+		handler.queueUserRegister.Acknowledgement(err, &msg)
 		return
 	})
 
 	handler.queueUserChangePassword.Consume(func(msg amqp.Delivery) {
 		err := handler.ChangePassword(ctx, msg.Body)
-		LogMqError(err, &msg, "")
+		handler.queueUserChangePassword.Acknowledgement(err, &msg)
 		return
 	})
 
 	handler.queueUserForgotPassword.Consume(func(msg amqp.Delivery) {
 		err := handler.ForgotPassword(ctx, msg.Body)
-		LogMqError(err, &msg, "")
+		handler.queueUserForgotPassword.Acknowledgement(err, &msg)
 		return
 	})
 }
@@ -90,7 +90,7 @@ func (e *emailSendingHandler) ForgotPassword(ctx context.Context, msg []byte) er
 		return fmt.Errorf("Validation error... %s", err)
 	}
 
-	err = e.EmailSendingUsecase.ChangePasswordNotif(ctx, userMessage)
+	err = e.EmailSendingUsecase.ForgotPasswordNotif(ctx, userMessage)
 	if err != nil {
 		return fmt.Errorf("Failed send email... %s", err)
 	}
