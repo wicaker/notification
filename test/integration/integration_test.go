@@ -19,7 +19,7 @@ var (
 )
 
 func init() {
-	os.Setenv("EMAIL_SENDING_FROM", "wicak_notification@mail.com")
+	os.Setenv("GOMAIL_EMAIL_SENDING_FROM", "wicak_notification@mail.com")
 }
 
 func TestMain(m *testing.M) {

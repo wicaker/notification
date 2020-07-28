@@ -25,7 +25,7 @@ func NewEmailSendingUsecase(timeout time.Duration, helper domain.EmailSendingHel
 func (eu *emailSendingUsecase) RegisterNotif(ctx context.Context, user *domain.User) error {
 	// preparing to send email
 	emailSending := domain.EmailSending{
-		EmailFrom:   os.Getenv("EMAIL_SENDING_FROM"),
+		EmailFrom:   os.Getenv("GOMAIL_EMAIL_SENDING_FROM"),
 		EmailTo:     []string{user.EmailDestination},
 		Subject:     "Please confirm your email address",
 		HTMLMessage: fmt.Sprintf(`<p>%s</p>`, user.Token),
@@ -38,7 +38,7 @@ func (eu *emailSendingUsecase) RegisterNotif(ctx context.Context, user *domain.U
 func (eu *emailSendingUsecase) ChangePasswordNotif(ctx context.Context, user *domain.User) error {
 	// preparing to send email
 	emailSending := domain.EmailSending{
-		EmailFrom:   os.Getenv("EMAIL_SENDING_FROM"),
+		EmailFrom:   os.Getenv("GOMAIL_EMAIL_SENDING_FROM"),
 		EmailTo:     []string{user.EmailDestination},
 		Subject:     "Change Password Confirmation",
 		HTMLMessage: fmt.Sprintf(`<p>%s</p>`, user.Token),
@@ -51,7 +51,7 @@ func (eu *emailSendingUsecase) ChangePasswordNotif(ctx context.Context, user *do
 func (eu *emailSendingUsecase) ForgotPasswordNotif(ctx context.Context, user *domain.User) error {
 	// preparing to send email
 	emailSending := domain.EmailSending{
-		EmailFrom:   os.Getenv("EMAIL_SENDING_FROM"),
+		EmailFrom:   os.Getenv("GOMAIL_EMAIL_SENDING_FROM"),
 		EmailTo:     []string{user.EmailDestination},
 		Subject:     "Forgot Password Confirmation",
 		HTMLMessage: fmt.Sprintf(`<p>%s</p>`, user.Token),
