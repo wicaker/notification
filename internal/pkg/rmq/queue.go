@@ -3,7 +3,9 @@ package rmq
 import (
 	"fmt"
 	"log"
+	"time"
 
+	"github.com/sirupsen/logrus"
 	"github.com/streadway/amqp"
 )
 
@@ -15,6 +17,7 @@ type Queue interface {
 	Consume(consumer MsgCons)
 	Publish(message string, routingKey string, header map[string]interface{}) error
 	GetQueueName() string
+	Acknowledgement(err error, msg *amqp.Delivery)
 }
 
 // queue collection
@@ -171,4 +174,15 @@ func (q *queue) GetQueueName() string {
 // QueuePurge to close channel
 func (q *queue) QueuePurge() (int, error) {
 	return q.channel.QueuePurge(q.name, true)
+}
+
+func (q *queue) Acknowledgement(err error, msg *amqp.Delivery) {
+	if err != nil {
+		logrus.WithFields(logrus.Fields{
+			"at": time.Now().Format("2006-01-02 15:04:05"),
+		}).Printf("%s. Message from routingKey: %s rejected...", err, msg.RoutingKey)
+		msg.Reject(false)
+	} else {
+		msg.Ack(true)
+	}
 }
